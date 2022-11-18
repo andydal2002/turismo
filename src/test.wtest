@@ -1,0 +1,51 @@
+import tpTuristas.*
+
+const pepe = new Turista(edad = 10, millas = 10, preferencias = [museo])
+const carlos = new Turista(edad = 69, millas = 8, preferencias = [parque, museo])
+const juan = new Turista(edad = 72, millas = 8, preferencias = [museo])
+
+const disney = new SitioInfantil(costoEntrada = 1000, categoria = parque)
+const casino = new SitioMayores(costoEntrada = 1000, descuento = 0.2, categoria = museo)
+
+
+test "Pepe puede visitar un sitio infantil pero luego de un cambio en la cotizacion de la milla, ya no puede" {
+	
+	assert.that(disney.dejarPasar(pepe))
+	milla.cotizacion(1)
+	assert.notThat(disney.dejarPasar(pepe))
+
+}
+
+test "Carlos no puede visitar un sitio que hace descuento para mayores, pero luego de cumplir anio si puede" {
+	
+	assert.notThat(casino.dejarPasar(carlos))
+	carlos.cumplirAnios()
+	assert.that(casino.dejarPasar(carlos))
+}
+
+test "Juan va al casino y obtiene beneficios en la reparticion" {
+	juan.visitar(casino)
+	pais.agregarTurista(juan)
+	pais.agregarSitio(casino)
+	pais.repartirMillas()
+	assert.equals(juan.millas(),  10)
+}
+
+test "Pepe no va a ningun museo, por lo que sufre una penalizacion en la reparticion" {
+	pais.agregarTurista(pepe)
+	pais.agregarSitio(casino)
+	pais.agregarSitio(disney)
+	pais.repartirMillas()
+	assert.equals(pepe.millas(),  -90)
+}
+
+test "Carlos visita el casino, pero no disney, por lo que se penaliza (parque) y se beneficia (museo)" {
+	carlos.cumplirAnios()
+	carlos.visitar(casino)
+	pais.agregarTurista(carlos)
+	pais.agregarSitio(casino)
+	pais.agregarSitio(disney)
+	pais.repartirMillas()
+	assert.equals(carlos.millas(),  -190)
+}
+
